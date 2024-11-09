@@ -3,6 +3,7 @@ import express from "express";
 import connectDB from "./db.config.js";
 import userModel from "./user.model.js";
 import { createClient } from "redis";
+import cors from "cors";
 
 const redisClient = createClient({
   url: process.env.REDIS_URL || "redis://localhost:6379",
@@ -15,6 +16,12 @@ async function bootstrap() {
   await redisClient.connect();
 
   const app = express();
+
+  app.use(
+    cors({
+      origin: "*",
+    })
+  );
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
